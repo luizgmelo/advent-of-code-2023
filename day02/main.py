@@ -1,38 +1,31 @@
-import re
-
-# with open('puzzle_input.txt', 'r') as f:
-#     s = f.read()
-
-with open('notsolvedyet.txt', 'r') as f:
+with open('puzzle_input.txt', 'r') as f:
     s = f.read()
 
-red = 0
-green = 0
-blue = 0
-id = 1
+# with open('notsolvedyet.txt', 'r') as f:
+#     s = f.read()
+
+game_number = 1
+possible = True
 sum_ids = 0
-for x in s.strip().split("\n"):
-    red_per_game = re.findall(r"\d red", x)
-    green_per_game = re.findall(r"\d green", x)
-    blue_per_game = re.findall(r"\d blue", x)
-    for r in red_per_game:
-        r = int(r[0])
-        red += r
-    for g in green_per_game:
-        g = int(g[0])
-        green += g
-    for b in blue_per_game:
-        b = int(b[0])
-        blue += b
+for line in s.strip().split("\n"):
+    possible = True
+    line = line.split(":")
+    game = line[0]
+    for random in line[1].split(";"):
+        for cubes in random.split(","):
+            cubes = cubes.strip().split(" ")
+            amount = int(cubes[0])
+            color = cubes[1]
+            if amount > 12 and color == 'red':
+                possible = False
+            if amount > 13 and color == 'green':
+                possible = False
+            if amount > 14 and color == 'blue':
+                possible = False
 
-    if red > 12 or green > 13 or blue > 14:
-        break
+    if possible == True:
+        sum_ids += game_number
+    game_number += 1
 
-    sum_ids += id
+print(sum_ids) 
 
-    red = 0
-    green = 0
-    blue = 0
-    id += 1
-
-print("Sum IDS:", sum_ids)
